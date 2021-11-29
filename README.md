@@ -117,5 +117,5 @@ YES
    java-lang/app gradle eclipse
 
 - Eclipse IDE에서 gradle 로 초기화시킨 프로젝트를 임포트 할 수 있는가?
-import java-lang
+import java-lang/app
 
