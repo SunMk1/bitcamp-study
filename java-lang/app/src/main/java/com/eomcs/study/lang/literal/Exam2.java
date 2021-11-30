@@ -1,4 +1,4 @@
-//리터럴: 숫자를 표현하는 다양한 방법
+//리터럴: 데이터를 표현하는 다양한 방법
 package com.eomcs.study.lang.literal;
 
 import org.springframework.web.bind.annotation.GetMapping;
