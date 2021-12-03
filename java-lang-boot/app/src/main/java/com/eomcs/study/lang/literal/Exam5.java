@@ -22,4 +22,13 @@ public class Exam5 {
     return "문자:" + (char)0x041 + ',' + (char)0xac00; // 문자의 코드 값은 그냥 정수 값이다.
     // 문자코드로 형변환 해줘야한다.
   }
+  @GetMapping("/test4")
+  public String test4() {
+    return "문자:" + (char)65 + ',' + (char)44032; // 문자의 코드 값은 그냥 정수 값이다.
+    // 문자코드로 형변환 해줘야한다.
+  }
+  @GetMapping("/test5")
+  public String test5() {
+    return "문자:" + '\u4eba' + '\u00a9' + '\u03c0'; // 키보드에 없는 특수문자를 쓸때 코드로 사용
+  }
 }
