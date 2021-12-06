@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("lang.varable.exam1")// 클래스 이름이 같은 경우 충돌 방지
-@RequestMapping("/lang/varialbe/exam1")
+@RequestMapping("/lang/variable/exam1")
 public class Exam1 {
 
   //test1?name=홍길동&tel=010-9999-1111&gender=man

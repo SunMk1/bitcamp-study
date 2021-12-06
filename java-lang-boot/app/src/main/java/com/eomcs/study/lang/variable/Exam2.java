@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("lang.varable.exam2")
-@RequestMapping("/lang/varialbe/exam2")
+@RequestMapping("/lang/variable/exam2")
 public class Exam2 {
 
   //name1=홍길동&name2=유관순&name3=안중근&name4=윤봉길&name5=김구&name6=김원봉&name7=이순신
