@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("lang.varable.exam2")
+@RestController("lang.variable.exam2")
 @RequestMapping("/lang/variable/exam2")
 public class Exam2 {
 

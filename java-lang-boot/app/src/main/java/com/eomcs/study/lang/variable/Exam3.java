@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("lang.varable.exam3")// 클래스 이름이 같은 경우 충돌 방지
+@RestController("lang.variable.exam3")// 클래스 이름이 같은 경우 충돌 방지
 @RequestMapping("/lang/variable/exam3")
 public class Exam3 {
 
