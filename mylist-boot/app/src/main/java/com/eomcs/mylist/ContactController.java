@@ -51,7 +51,7 @@ public class ContactController {
   public Object delete(String email) {
     for (int i=0; i < size; i++) {
       if (contacts[i].split(",")[1].equals(email)) {
-        for (int j = i; i+1 < size; j++) {
+        for (int j = i + 1; j < size; j++) {
           contacts[j-1] = contacts[j];
         }
         size--;

@@ -51,42 +51,34 @@
             xCompany.value = values[3]
         })
 
-
         document.querySelector("#x-update-btn").onclick = function() {
-            if (xName.value == "" || xEmail.value == "" || xTel.value == "") {
+            if (xName.value == "" || xTel.value == "") {
                     window.alert("필수 입력 항목이 비어 있습니다.")
                     return
                 }
-
-            fetch(`/contact/add?name=${xName.value}&email=${xEmail.value}&tel=${xTel.value}&company=${xCompany.value}`)
-            .then(function(response){
+            fetch(`/contact/update?name=${xName.value}&email=${xEmail.value}&tel=${xTel.value}&company=${xCompany.value}`)
+            .then(function(response) {
                 return response.text()
             })
             .then(function(text){
                 console.log(text)
                 location.href = "index.html"
             })
+        } 
+        
+        document.querySelector("#x-delete-btn").onclick = function() {
+            fetch(`/contact/delete?email=${email}`)
+            .then(function(response){
+                return response.json()
+            })
+            .then(function(result) {
+                console.log(result)
+                location.href = "index.html"
+            })
         }
 
         document.querySelector("#x-cancel-btn").onclick = function() {
             location.href = "index.html"
-        }
-
-        fetch(`/contact/update?name=${xName}&email=${xEmail}&tel=${xTel}&company=${xCompany}`)
-        .then(function(reponse) {
-            return response.text()
-        })
-        .then(function(text){
-            console.log(text)
-            location.href = "index.html"
-        })
-
-        document.querySelector("#x-cancel-btn").onclick = function() {
-            location.href = "index.html"
-        }
-
-        document.querySelector("x-delete-btn").onclick = function() {
-          console.log("dd")
         }
     </script>
 </body>
