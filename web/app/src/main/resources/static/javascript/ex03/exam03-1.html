@@ -11,22 +11,51 @@
 // => 그 내장 변수의 이름은 "arguments" 이다.
 function f1(a) { 
 	console.log("a =", a);
-	console.log("----------------");
-	
-	console.log(arguments.length);
-	
-  for (var value of arguments) {
-    console.log(value);
-  }
-  console.log("----------------");
-  for (var i in arguments) {
-    console.log(arguments[i]);
-  }
-  console.log("----------------");
+  console.log(arguments)
+}
+
+f1()
+console.log("----------------");
+
+f1(100)
+console.log("----------------");
+
+f1(100, 200, 300, 400)
+console.log("----------------");
+
+function f2(a) {
   for (var i = 0; i < arguments.length; i++) {
     console.log(arguments[i]);
   }
 }
+f2(100, 200, 300, 400)
+console.log("----------------");
+
+function f3(a) {
+  for (var value of arguments) {
+    console.log(value);
+  }
+}
+f3(100, 200, 300, 400)
+  console.log("----------------");
+
+function f4(a) {
+  for (var i in arguments) {
+    console.log(arguments[i]);
+  }
+}
+f4(100, 200, 300, 400)
+
+function f5(a) {
+  // arguments 내장 변수는 Array() 초기화시킨 배열 객체가 아니기 때문에
+  // forEach 라는 함수가 없다.
+  arguments.forEach(function(value) {
+    console.log(arguments[i]);
+  })
+}
+f4(100, 200, 300, 400)
+
+
 
 //f1();
 //f1(100);

@@ -25,6 +25,10 @@ public class ContactController {
 
     return size;
   }
+  //  if (size == contacts.length) {
+  //    int newCapacity = contacts.length + (contacts.length >> 1);
+  //    String[] arr = new String[newCapacity];
+  //  }
 
   @RequestMapping("/contact/get")
   public Object get(String email) {
