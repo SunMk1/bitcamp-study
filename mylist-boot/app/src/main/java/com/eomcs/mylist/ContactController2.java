@@ -4,12 +4,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ContactController {
+public class ContactController2 {
 
   String[] contacts = new String[5];
   int size = 0;
 
-  @RequestMapping("/contact/list")
+  @RequestMapping("/contact2/list")
   public Object list() { 
     String[] arr =  new String[size];
     for (int i=0; i < size; i++) {
@@ -18,7 +18,7 @@ public class ContactController {
     return arr;
   }
 
-  @RequestMapping("/contact/add")
+  @RequestMapping("/contact2/add")
   public Object add(String name,String email,String tel, String company) {
     String contact = name + "," + email + "," + tel + "," + company;
     contacts[size++] = contact;
@@ -26,7 +26,7 @@ public class ContactController {
     return size;
   }
 
-  @RequestMapping("/contact/get")
+  @RequestMapping("/contact2/get")
   public Object get(String email) {
     for (int i=0; i < size; i++) {
       if (contacts[i].split(",")[1].equals(email)) {
@@ -36,7 +36,7 @@ public class ContactController {
     return "";
   }
 
-  @RequestMapping("/contact/update")
+  @RequestMapping("/contact2/update")
   public Object update(String name,String email,String tel, String company) {
     String contact = name + "," + email + "," + tel + "," + company;
     for (int i=0; i < size; i++) {
@@ -47,7 +47,7 @@ public class ContactController {
     }
     return 0;
   }
-  @RequestMapping("/contact/delete")
+  @RequestMapping("/contact2/delete")
   public Object delete(String email) {
     for (int i=0; i < size; i++) {
       if (contacts[i].split(",")[1].equals(email)) {
