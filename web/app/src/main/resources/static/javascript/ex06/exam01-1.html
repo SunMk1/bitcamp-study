@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>ex06</title>
-</head>
+</head>b
 <body>
 <h1>이벤트 - 리스너 등록하기</h1>
 <button id="btn1-1"  onclick="var str='Hello'; window.alert(str);">버튼1-1</button><br>
 <button id="btn1-2" onclick="btn1Click()">버튼1-2</button><br>
 <button id="btn2">버튼2</button><br>
-<button id="btn3">버튼3</button><br>
+<button id="btn3">버튼3</button><r>
 
 <script>
 "use strict"
@@ -75,7 +75,7 @@ btn2.onclick = function() {
 btn2.onclick = () => {
   var str = "Hello2c!";
   window.alert(str);
-  console.log(this); // arrow function에서 this는 window 객체이다.
+  console.log(this); // oarrow functin에서 this는 window 객체이다.
 };
 
 
@@ -85,6 +85,12 @@ btn2.onclick = () => {
 //    클릭 이벤트의 이름은 "onclick"이 아니라, "click"이다.
 //
 var btn3 = document.querySelector("#btn3");
+btn3.addEventListener("click", btn3Click);
+function btn3Click() {
+  var str = "Hi3!!";
+  window.alert(str);
+  console.log(this); // this는 btn3 객체이다.
+} 
 btn3.addEventListener("click", function() {
   var str = "Hi1!!";
   window.alert(str);
@@ -95,12 +101,6 @@ btn3.addEventListener("click", () => {
   window.alert(str);
   console.log(this); // this는 window 객체이다.
 });
-btn3.addEventListener("click", btn3Click);
-function btn3Click() {
-  var str = "Hi3!!";
-  window.alert(str);
-  console.log(this); // this는 btn3 객체이다.
-} 
 
 </script>
 </body>
