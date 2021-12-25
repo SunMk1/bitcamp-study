@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Ex00Controller {
+
   @RequestMapping("/javascript/ex00/exam06")
+  //  UI 조각을 만들어서 던짐
   public String exam06() {
     return "<ul><li>홍길동</li><li>임꺽정</li><li>유관순</li></ul>";
   }
