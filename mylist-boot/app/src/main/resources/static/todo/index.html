@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-do</title>
+</head>
+<body>
+    <h1>To-do</h1>
+    <a href="form.html">추가</a>
+    <table id="x-todo-table" border="1">
+        <thead>
+            <tr>
+                <th>해야 할 일</th>
+                <th>완료</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    <script>
+        var tbody = document.querySelector("#x-todo-table tbody")
+
+        fetch("/todo/list")
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(todoList) {
+            console.log(todoList)
+            
+                for (var todo of todoList) {
+                var values = todo.split(",")
+                var tr = document.createElement("tr")
+                tr.innerHTML = `<td>${todoList[i].title}</td>
+                <td><input type="checkbox"></td>
+                <td><button type="button">삭제</td>`
+
+                tbody.appendChild(tr)
+            }
+            
+        })
+    </script>
+</body>
+</html>

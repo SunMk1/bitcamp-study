@@ -6,58 +6,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ContactController {
 
-  String[] contacts = new String[5];
-  int size = 0;
+
 
   @RequestMapping("/contact/list")
   public Object list() { 
-    String[] arr =  new String[size];
-    for (int i=0; i < size; i++) {
-      arr[i] = contacts[i];
-    }
-    return arr;
+    return ArrayList.toArray();
   }
 
   @RequestMapping("/contact/add")
-  public Object add(String name,String email,String tel, String company) {
-    String contact = name + "," + email + "," + tel + "," + company;
-    contacts[size++] = contact;
-
-    return size;
+  public Object add(Contact contact) {
+    ArrayList.add(contact);
+    return ArrayList.size;
   }
 
   @RequestMapping("/contact/get")
   public Object get(String email) {
-    for (int i=0; i < size; i++) {
-      if (contacts[i].split(",")[1].equals(email)) {
-        return contacts[i];
-      }
+    int index = ArrayList.indexOf(email);
+    if (index == -1) {
+      return "";
     }
-    return "";
+    return ArrayList.contacts[index];
   }
 
   @RequestMapping("/contact/update")
-  public Object update(String name,String email,String tel, String company) {
-    String contact = name + "," + email + "," + tel + "," + company;
-    for (int i=0; i < size; i++) {
-      if (contacts[i].split(",")[1].equals(email)) {
-        contacts[i] = contact;
-        return 1;
-      }
+  public Object update(Contact contact) {
+    int index = ArrayList.indexOf(contact.email);
+    if (index == -1) {
+      return 0;
     }
-    return 0;
+    return ArrayList.set(index, contact) == null ? 0 : 1;
   }
+
   @RequestMapping("/contact/delete")
   public Object delete(String email) {
-    for (int i=0; i < size; i++) {
-      if (contacts[i].split(",")[1].equals(email)) {
-        for (int j = i + 1; j < size; j++) {
-          contacts[j-1] = contacts[j];
-        }
-        size--;
-        return 1;
-      }
+    int index = ArrayList.indexOf(email);
+    if (index == -1) {
+      return 0;
     }
-    return 0;
+
+    ArrayList.remove(index); // 메서드 이름으로 코드의 의미를 짐작할 수 있다. 이것이 메서드를 분리하는 이유이다.
+    return 1;
   }
 }
