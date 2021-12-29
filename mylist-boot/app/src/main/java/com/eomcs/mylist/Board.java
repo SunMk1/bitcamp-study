@@ -2,23 +2,22 @@ package com.eomcs.mylist;
 
 public class Board {
 
-  String titel;
+  String title;
   String content;
   int viewCount;
   java.sql.Date createdDate;
 
-
   @Override
   public String toString() {
-    return "Board [titel=" + titel + ", content=" + content + ", viewCount=" + viewCount
+    return "Board [title=" + title + ", content=" + content + ", viewCount=" + viewCount
         + ", createdDate=" + createdDate + "]";
   }
 
-  public String getTitel() {
-    return titel;
+  public String getTitle() {
+    return title;
   }
-  public void setTitel(String titel) {
-    this.titel = titel;
+  public void setTitle(String title) {
+    this.title = title;
   }
   public String getContent() {
     return content;
@@ -38,5 +37,6 @@ public class Board {
   public void setCreatedDate(java.sql.Date createdDate) {
     this.createdDate = createdDate;
   }
+
 
 }

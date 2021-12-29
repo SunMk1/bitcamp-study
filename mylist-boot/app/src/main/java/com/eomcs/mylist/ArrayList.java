@@ -4,8 +4,6 @@ public class ArrayList {
   static Contact[] contacts = new Contact[5];
   static int size = 0;
 
-  //기능 :
-  // - 입력 받은 파라미터 값을 가지고 CSV 형식으로 문자열을 만들어 준다.
   // 기능 :
   // - 이메일로 연락처 정보를 찾는다.
   // - 찾은 연락처의 배열 인덱스를 리턴한다.
