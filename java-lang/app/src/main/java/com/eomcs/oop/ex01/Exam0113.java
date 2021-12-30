@@ -24,6 +24,8 @@ public class Exam0113 {
     s.kor = 100;
     s.eng = 90;
     s.math = 80;
+    s.sum = s.kor + s.eng + s.math;
+    s.aver = s.sum / 3f;
 
     // 성적 데이터를 클래스로 묶어 놓으면 값을 다루기가 편하다.
     // => 다음과 같이 성적 데이터를 한 번에 넘길 수 있다.
@@ -31,8 +33,7 @@ public class Exam0113 {
   }
 
   static void printScore(Score s) {
-    s.sum = s.kor + s.eng + s.math;
-    s.aver = s.sum / 3;
+
     System.out.printf("%s: %d, %d, %d, %d, %.1f\n",
         s.name, s.kor, s.eng, s.math, s.sum, s.aver);
   }

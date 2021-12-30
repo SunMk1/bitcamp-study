@@ -75,7 +75,7 @@ public class Exam0112 {
     s.eng = 90;
     s.math = 80;
     s.sum = s.kor + s.eng + s.math;
-    s.aver = s.sum / 3;
+    s.aver = s.sum / 3f;
 
     // 4) 메모리의 값을 꺼내 보자.
     // - "s에 저장된 주소로 찾아가서 name 항목의 값"
