@@ -28,7 +28,7 @@ contactMap.set("한상봉", "010-1212-5555")
 var iterator = contactMap[Symbol.iterator]()
 
 while (true) {
-  var entry= iterator.next() // 보통 key/value 한쌍으로 되어 있는 값을 가리킬 때 entry라 한다.
+  var entry = iterator.next() // 보통 key/value 한쌍으로 되어 있는 값을 가리킬 때 entry라 한다.
   if (entry.done) {
     break
   }
@@ -37,6 +37,8 @@ console.log(v)
 }
 console.log("--------------------")
 
+// 2) for...of 통해 자동으로 처리한다.
+// 위 코드 함축
 for (var v of contactMap) { 
 	console.log(v);
 }

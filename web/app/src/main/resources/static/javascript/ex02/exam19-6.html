@@ -18,7 +18,7 @@ function* getIterableObject() {
   yield "안중근"
 }
 
-var obj = getIterableObjrct()
+var obj = getIterableObject()
 
 for (var v of obj) { 
 	console.log(v);
@@ -29,7 +29,7 @@ console.log("-------------------")
 var obj2 = getIterableObject()
 
 while (true) {
-  var item= obj2.next() // yield 명령을 통해 리턴된 값을 담고 있는 객체 리턴
+  var item = obj2.next() // yield 명령을 통해 리턴된 값을 담고 있는 객체 리턴
   if (item.done) {
     break
   }
