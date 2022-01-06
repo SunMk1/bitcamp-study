@@ -1,11 +1,10 @@
-package com.eomcs.mylist;
+package com.eomcs.mylist.domain;
 
 public class Contact {
   String name;
   String email;
   String tel;
   String company;
-
 
   @Override
   public String toString() {

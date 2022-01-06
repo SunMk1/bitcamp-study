@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>게시글</title>
+</head>
+<body>
+    <h1>게시글 상세</h1>
+    <form>
+        제목*: <input id="x-title" type="text"><br> 
+        내용*: <textarea id="x-content" cols="60" rows="10"></textarea><br>
+        조회수: <span id="x-viewCount"></span><br>
+        등록일: <span id="x-createdDate"></span><br>
+       <button id="x-update-btn" type="button">변경</button>
+       <button id="x-delete-btn" type="button">삭제</button>
+       <button id="x-cancel-btn" type="button">취소</button>
+    </form>
+    <script>
+        // var arr = location.href.split("?")
+        // if (arr.length == 1) {
+        //     alert("요청 형식이 올바르지 않습니다.")
+        //     throw "URL 형식 오류"
+        // }
+        // var qs = arr[1]
+        // console.log(qs)
+
+        var params = new URLSearchParams(location.search)
+        var index = params.get("index")
+
+        if (index == null) {
+            alert("이메일 값이 없습니다.")
+            throw "파라미터 오류"
+        }
+        console.log(index)
+
+        var xTitle = document.querySelector("#x-title")
+        var xContent = document.querySelector("#x-content")
+        var xViewCount = document.querySelector("#x-viewCount")
+        var xCreatedDate = document.querySelector("#x-createdDate")
+
+        fetch(`/board/get?index=${index}`)
+        .then(function(response){
+            return response.json()
+        })
+        .then(function(boards){
+            xTitle.value = boards.title
+            xContent.value = boards.content
+            xViewCount.innerHTML = boards.viewCount
+            xCreatedDate.innerHTML = boards.createdDate
+        })
+
+        document.querySelector("#x-update-btn").onclick = function() {
+            if (xTitle.value == "" || xContent.value == "") {
+                    window.alert("필수 입력 항목이 비어 있습니다.")
+                    return
+                }
+            fetch(`/board/update?index=${index}&title=${xTitle.value}&content=${xContent.value}`)
+            .then(function(response) {
+                return response.text()
+            })
+            .then(function(text){
+                console.log(text)
+                location.href = "index.html"
+            })
+        } 
+        
+        document.querySelector("#x-delete-btn").onclick = function() {
+            fetch(`/board/delete?index=${index}`)
+            .then(function(response){
+                return response.json()
+            })
+            .then(function(result) {
+                console.log(result)
+                location.href = "index.html"
+            })
+        }
+
+        document.querySelector("#x-cancel-btn").onclick = function() {
+            location.href = "index.html"
+        }
+    </script>
+</body>
+</html>

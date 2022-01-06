@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>책리뷰</title>
+</head>
+<body>
+    <h1>책 한줄 리뷰</h1>
+    <a href="form.html">새 리뷰</a>
+    <table id="x-book-table" border="1">
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>작가</th>
+                <th>출판사</th>
+                <th>한줄평</th>
+                <th>쪽수</th>
+                <th>가격</th>
+                <th>완독일</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    <script>
+        var tbody = document.querySelector("#x-book-table tbody")
+
+        fetch("/book/list")
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(books) {
+            for (var book of books) {
+                var tr = document.createElement("tr")
+                tr.innerHTML = `<td><a href="view.html?title=${book.title}">${book.title}</a></td>
+                <td>${book.author}</td>
+                <td>${book.press}</td>
+                <td>${book.feed}</td>
+                <td>${book.page}</td>
+                <td>${book.price}</td>
+                <td>${book.readDate}</td>`
+                
+
+                tbody.appendChild(tr)
+            }
+        })
+    </script>
+</body>
+</html>
