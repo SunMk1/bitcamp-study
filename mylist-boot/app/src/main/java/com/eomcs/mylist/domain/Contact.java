@@ -6,6 +6,14 @@ public class Contact {
   String tel;
   String company;
 
+  public String toCsvString() {
+    return String.format("%s,%s,%s,%s",
+        this.getName(),
+        this.getEmail(),
+        this.getTel(),
+        this.getCompany());
+  }
+
   @Override
   public String toString() {
     return "Contact [name=" + name + ", email=" + email + ", tel=" + tel + ", company=" + company
