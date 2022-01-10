@@ -11,6 +11,10 @@ public class BoardController {
 
   ArrayList boardList = new ArrayList();
 
+  public BoardController() {
+    System.out.println("BoardController() 호출됨!");
+  }
+
   @RequestMapping("/board/list")
   public Object list() { 
     return boardList.toArray();
@@ -47,7 +51,9 @@ public class BoardController {
 
   @RequestMapping("/board/delete")
   public Object delete(int index) {
-
+    if (index < 0 || index >= boardList.size()) {
+      return 0;
+    }
     return boardList.remove(index) == null ? 0 : 1;
   }
 }

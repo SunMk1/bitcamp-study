@@ -10,6 +10,10 @@ public class TodoController {
 
   ArrayList todoList = new ArrayList();
 
+  public TodoController() {
+    System.out.println("TodoController() 호출됨!");
+  }
+
   @RequestMapping("/todo/list")
   public Object list() { 
     return todoList.toArray();
@@ -45,7 +49,6 @@ public class TodoController {
     if (index < 0 || index >= todoList.size()) {
       return 0;
     }
-
     todoList.remove(index); // 메서드 이름으로 코드의 의미를 짐작할 수 있다. 이것이 메서드를 분리하는 이유이다.
     return 1;
   }

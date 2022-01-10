@@ -11,6 +11,10 @@ public class ContactController {
 
   ArrayList contactsList = new ArrayList();
 
+  public ContactController() {
+    System.out.println("ContactController() 호출됨!");
+  }
+
   @RequestMapping("/contact/list")
   public Object list() { 
     return contactsList.toArray();

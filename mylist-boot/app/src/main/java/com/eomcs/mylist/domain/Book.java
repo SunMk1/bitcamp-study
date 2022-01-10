@@ -11,13 +11,6 @@ public class Book {
   Date readDate;
   String feed;
 
-
-  @Override
-  public String toString() {
-    return "Book [title=" + title + ", author=" + author + ", press=" + press + ", page=" + page
-        + ", price=" + price + ", readDate=" + readDate + ", feed=" + feed + "]";
-  }
-
   public String getTitle() {
     return title;
   }

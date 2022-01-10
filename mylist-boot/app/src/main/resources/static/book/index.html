@@ -2,21 +2,18 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>책리뷰</title>
+    <title>독서록</title>
 </head>
 <body>
-    <h1>책 한줄 리뷰</h1>
-    <a href="form.html">새 리뷰</a>
+    <h1>독서록</h1>
+    <a href="form.html">새 독서록</a>
     <table id="x-book-table" border="1">
         <thead>
             <tr>
-                <th>제목</th>
-                <th>작가</th>
+                <th>책</th>
+                <th>저자</th>
                 <th>출판사</th>
-                <th>한줄평</th>
-                <th>쪽수</th>
-                <th>가격</th>
-                <th>완독일</th>
+                <th>페이지</th>
             </tr>
         </thead>
         <tbody>
@@ -32,16 +29,13 @@
             return response.json()
         })
         .then(function(books) {
-            for (var book of books) {
+            for (var i = 0; i < books.length; i++) {
+                var book = books[i]
                 var tr = document.createElement("tr")
-                tr.innerHTML = `<td><a href="view.html?title=${book.title}">${book.title}</a></td>
+                tr.innerHTML = `<td><a href="view.html?index=${i}">${book.title}</a></td>
                 <td>${book.author}</td>
                 <td>${book.press}</td>
-                <td>${book.feed}</td>
-                <td>${book.page}</td>
-                <td>${book.price}</td>
-                <td>${book.readDate}</td>`
-                
+                <td>${book.page}</td>`
 
                 tbody.appendChild(tr)
             }
