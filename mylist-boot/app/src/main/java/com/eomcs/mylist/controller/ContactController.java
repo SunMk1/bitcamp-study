@@ -1,5 +1,6 @@
 package com.eomcs.mylist.controller;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +12,24 @@ public class ContactController {
 
   ArrayList contactsList = new ArrayList();
 
-  public ContactController() {
+  public ContactController() throws Exception {
     System.out.println("ContactController() 호출됨!");
+
+    FileReader in = new FileReader("contacts.csv");
+    StringBuilder buf = new StringBuilder();
+    int c;
+
+    while ((c = in.read()) != -1) {
+      if (c == '\n') {
+        contactsList.add(Contact.valueOf(buf.toString()));
+
+        buf.setLength(0);
+
+      } else {
+        buf.append((char)c);
+      }
+    }
+    in.close();
   }
 
   @RequestMapping("/contact/list")
@@ -55,19 +72,6 @@ public class ContactController {
     return 1;
   }
 
-  @RequestMapping("/contact/save")
-  public Object save() throws Exception {
-    FileWriter out = new FileWriter("contacts.csv"); // 따로 경로를 지정하지 않으면 파일은 프로젝트 폴더에 생성된다.
-
-    Object[] arr = contactsList.toArray();
-    for (Object obj : arr) {
-      Contact contact = (Contact) obj;
-      out.write(contact.toCsvString() + "\n");
-    }
-
-    out.close();
-    return 0;
-  }
 
   //기능 :
   // - 이메일로 연락처 정보를 찾는다.
@@ -80,5 +84,19 @@ public class ContactController {
       }
     }
     return -1;
+  }
+
+  @RequestMapping("/contact/save")
+  public Object save() throws Exception {
+    FileWriter out = new FileWriter("contacts.csv"); // 따로 경로를 지정하지 않으면 파일은 프로젝트 폴더에 생성된다.
+
+    Object[] arr = contactsList.toArray();
+    for (Object obj : arr) {
+      Contact contact = (Contact) obj;
+      out.write(contact.toCsvString() + "\n");
+    }
+
+    out.close();
+    return arr.length;
   }
 }

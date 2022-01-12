@@ -31,8 +31,15 @@ public class Exam0410 {
     }
   }
 
+  static class A3 extends A2 {
+    @Override
+    void m() {
+      System.out.println("A3 의 m()");
+    }
+  }
+
   public static void main(String[] args) {
-    A2 obj = new A2();
+    A3 obj = new A3();
     obj.test();
   }
 }
