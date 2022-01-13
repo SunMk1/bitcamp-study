@@ -1,7 +1,9 @@
 package com.eomcs.mylist.controller;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.Date;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,19 +18,11 @@ public class BoardController {
   public BoardController() throws Exception {
     System.out.println("BoardController() 호출됨!");
 
-    FileReader in = new FileReader("boards.csv");
-    StringBuilder buf = new StringBuilder();
-    int c;
+    BufferedReader in = new BufferedReader(new FileReader("boards.csv"));
 
-    while ((c = in.read()) != -1) {
-      if (c == '\n') {
-        boardList.add(Board.valueOf(buf.toString()));
-
-        buf.setLength(0);
-
-      } else {
-        buf.append((char)c);
-      }
+    String line;
+    while ((line = in.readLine()) != null) {
+      boardList.add(Board.valueOf(line));
     }
     in.close();
   }
@@ -77,12 +71,12 @@ public class BoardController {
 
   @RequestMapping("/board/save")
   public Object save() throws Exception {
-    FileWriter out = new FileWriter("boards.csv"); // 따로 경로를 지정하지 않으면 파일은 프로젝트 폴더에 생성된다.
+    PrintWriter out = new PrintWriter(new FileWriter("boards.csv"));
 
     Object[] arr = boardList.toArray();
     for (Object obj : arr) {
       Board board = (Board) obj;
-      out.write(board.toCsvString() + "\n");
+      out.println(board.toCsvString());
     }
 
     out.close();

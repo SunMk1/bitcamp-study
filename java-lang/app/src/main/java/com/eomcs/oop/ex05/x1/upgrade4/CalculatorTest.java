@@ -1,6 +1,4 @@
-package com.eomcs.oop.ex05.x1.test4;
-
-// 기존 클래스와 연결한 후 새 기능 추가하기
+package com.eomcs.oop.ex05.x1.upgrade4;
 
 public class CalculatorTest {
   public static void main(String[] args) {
@@ -10,7 +8,7 @@ public class CalculatorTest {
     c.minus(200);
     c.multiple(2);
 
-    System.out.println(c.result);
+    System.out.println(c.getResult());
   }
 
 }

@@ -32,19 +32,12 @@ public class Board {
     return board;
   }
 
-
   public String toCsvString() {
     return String.format("%s,%s,%s,%s",
         this.getTitle(),
         this.getContent(),
         this.getViewCount(),
         this.getCreatedDate());
-  }
-
-  @Override
-  public String toString() {
-    return "Board [title=" + title + ", content=" + content + ", viewCount=" + viewCount
-        + ", createdDate=" + createdDate + "]";
   }
 
   public String getTitle() {

@@ -1,7 +1,9 @@
 package com.eomcs.mylist.controller;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.eomcs.mylist.domain.Todo;
@@ -15,19 +17,11 @@ public class TodoController {
   public TodoController() throws Exception {
     System.out.println("TodoController() 호출됨!");
 
-    FileReader in = new FileReader("todos.csv");
-    StringBuilder buf = new StringBuilder();
-    int c;
+    BufferedReader in = new BufferedReader(new FileReader("todos.csv"));
 
-    while ((c = in.read()) != -1) {
-      if (c == '\n') {
-        todoList.add(Todo.valueOf(buf.toString()));
-
-        buf.setLength(0);
-
-      } else {
-        buf.append((char)c);
-      }
+    String line;
+    while ((line = in.readLine()) != null) {
+      todoList.add(Todo.valueOf(line));
     }
     in.close();
   }
@@ -73,12 +67,12 @@ public class TodoController {
 
   @RequestMapping("/todo/save")
   public Object save() throws Exception {
-    FileWriter out = new FileWriter("todos.csv"); // 따로 경로를 지정하지 않으면 파일은 프로젝트 폴더에 생성된다.
+    PrintWriter out = new PrintWriter(new FileWriter("todos.csv"));
 
     Object[] arr = todoList.toArray();
     for (Object obj : arr) {
       Todo todo = (Todo) obj;
-      out.write(todo.toCsvString() + "\n");
+      out.println(todo.toCsvString());
     }
 
     out.close();

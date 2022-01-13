@@ -30,11 +30,6 @@ public class Todo {
         this.isDone());
   }
 
-  @Override
-  public String toString() {
-    return "Todo [title=" + title + ", done=" + done + "]";
-  }
-
   public String getTitle() {
     return title;
   }

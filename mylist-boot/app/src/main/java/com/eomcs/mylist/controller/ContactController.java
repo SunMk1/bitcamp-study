@@ -1,7 +1,9 @@
 package com.eomcs.mylist.controller;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.eomcs.mylist.domain.Contact;
@@ -10,37 +12,29 @@ import com.eomcs.util.ArrayList;
 @RestController
 public class ContactController {
 
-  ArrayList contactsList = new ArrayList();
+  ArrayList contactList = new ArrayList();
 
   public ContactController() throws Exception {
     System.out.println("ContactController() 호출됨!");
 
-    FileReader in = new FileReader("contacts.csv");
-    StringBuilder buf = new StringBuilder();
-    int c;
+    BufferedReader in = new BufferedReader(new FileReader("contacts.csv"));
 
-    while ((c = in.read()) != -1) {
-      if (c == '\n') {
-        contactsList.add(Contact.valueOf(buf.toString()));
-
-        buf.setLength(0);
-
-      } else {
-        buf.append((char)c);
-      }
+    String line;
+    while ((line = in.readLine()) != null) {
+      contactList.add(Contact.valueOf(line));
     }
     in.close();
   }
 
   @RequestMapping("/contact/list")
   public Object list() { 
-    return contactsList.toArray();
+    return contactList.toArray();
   }
 
   @RequestMapping("/contact/add")
   public Object add(Contact contact) {
-    contactsList.add(contact);
-    return contactsList.size();
+    contactList.add(contact);
+    return contactList.size();
   }
 
   @RequestMapping("/contact/get")
@@ -49,7 +43,7 @@ public class ContactController {
     if (index == -1) {
       return "";
     }
-    return contactsList.get(index);
+    return contactList.get(index);
   }
 
   @RequestMapping("/contact/update")
@@ -58,7 +52,7 @@ public class ContactController {
     if (index == -1) {
       return 0;
     }
-    return contactsList.set(index, contact) == null ? 0 : 1;
+    return contactList.set(index, contact) == null ? 0 : 1;
   }
 
   @RequestMapping("/contact/delete")
@@ -68,7 +62,7 @@ public class ContactController {
       return 0;
     }
 
-    contactsList.remove(index); // 메서드 이름으로 코드의 의미를 짐작할 수 있다. 이것이 메서드를 분리하는 이유이다.
+    contactList.remove(index); // 메서드 이름으로 코드의 의미를 짐작할 수 있다. 이것이 메서드를 분리하는 이유이다.
     return 1;
   }
 
@@ -77,8 +71,8 @@ public class ContactController {
   // - 이메일로 연락처 정보를 찾는다.
   // - 찾은 연락처의 배열 인덱스를 리턴한다.
   int indexOf(String email) {
-    for (int i=0; i < contactsList.size(); i++) {
-      Contact contact = (Contact) contactsList.get(i);
+    for (int i=0; i < contactList.size(); i++) {
+      Contact contact = (Contact) contactList.get(i);
       if (contact.getEmail().equals(email)) {
         return i;
       }
@@ -88,12 +82,12 @@ public class ContactController {
 
   @RequestMapping("/contact/save")
   public Object save() throws Exception {
-    FileWriter out = new FileWriter("contacts.csv"); // 따로 경로를 지정하지 않으면 파일은 프로젝트 폴더에 생성된다.
+    PrintWriter out = new PrintWriter(new FileWriter("contacts.csv"));
 
-    Object[] arr = contactsList.toArray();
+    Object[] arr = contactList.toArray();
     for (Object obj : arr) {
       Contact contact = (Contact) obj;
-      out.write(contact.toCsvString() + "\n");
+      out.println(contact.toCsvString());
     }
 
     out.close();
