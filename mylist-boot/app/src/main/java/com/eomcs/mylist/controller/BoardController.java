@@ -1,9 +1,11 @@
 package com.eomcs.mylist.controller;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Date;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +20,20 @@ public class BoardController {
   public BoardController() throws Exception {
     System.out.println("BoardController() 호출됨!");
 
-    BufferedReader in = new BufferedReader(new FileReader("boards.csv"));
+    DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream("boards.data")));
 
-    String line;
-    while ((line = in.readLine()) != null) {
-      boardList.add(Board.valueOf(line));
+    while (true) {
+      try {
+        Board board = new Board();
+        board.setTitle(in.readUTF());
+        board.setContent(in.readUTF());
+        board.setViewCount(in.readInt());
+        board.setCreatedDate(Date.valueOf(in.readUTF()));
+
+        boardList.add(board);
+      } catch (Exception e) {
+        break;
+      }
     }
     in.close();
   }
@@ -71,12 +82,15 @@ public class BoardController {
 
   @RequestMapping("/board/save")
   public Object save() throws Exception {
-    PrintWriter out = new PrintWriter(new FileWriter("boards.csv"));
+    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("boards.data")));
 
     Object[] arr = boardList.toArray();
     for (Object obj : arr) {
       Board board = (Board) obj;
-      out.println(board.toCsvString());
+      out.writeUTF(board.getTitle());
+      out.writeUTF(board.getContent());
+      out.writeInt(board.getViewCount());
+      out.writeUTF(board.getCreatedDate().toString());
     }
 
     out.close();

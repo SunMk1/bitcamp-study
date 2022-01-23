@@ -21,7 +21,7 @@ public class Exam0610 {
         // false를 리턴하면 배열에 포함되지 않는다.
 
         // 파일,디렉토리 이름이 .java 로 끝나는 경우만 리턴 배열에 포함시키다.
-        if (name.endsWith(".java"))
+        if (name.startsWith("t"))
           return true; // 조회 결과에 포함시켜라!
         return false; // 조회 결과에서 제외하라!
       }

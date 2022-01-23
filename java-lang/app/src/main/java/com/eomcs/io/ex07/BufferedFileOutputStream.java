@@ -29,13 +29,11 @@ public class BufferedFileOutputStream extends FileOutputStream {
     }
   }
 
-
   @Override
   public void close() throws IOException {
     this.flush();
     super.close();
   }
-
 
   @Override
   public void flush() throws IOException {
