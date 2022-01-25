@@ -1,16 +1,17 @@
 package com.eomcs.mylist.controller;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.Date;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.eomcs.mylist.domain.Board;
 import com.eomcs.util.ArrayList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class BoardController {
@@ -82,18 +83,15 @@ public class BoardController {
 
   @RequestMapping("/board/save")
   public Object save() throws Exception {
-    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("boards.data")));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("boards.json")));
 
-    Object[] arr = boardList.toArray();
-    for (Object obj : arr) {
-      Board board = (Board) obj;
-      out.writeUTF(board.getTitle());
-      out.writeUTF(board.getContent());
-      out.writeInt(board.getViewCount());
-      out.writeUTF(board.getCreatedDate().toString());
-    }
+    ObjectMapper mapper = new ObjectMapper();
+
+    String jsonStr = mapper.writeValueAsString(boardList.toArray());
+
+    out.println(jsonStr);
 
     out.close();
-    return arr.length;
+    return boardList.size();
   }
 }
