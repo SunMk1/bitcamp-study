@@ -1,16 +1,15 @@
 package com.eomcs.mylist.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.sql.Date;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.eomcs.mylist.domain.Book;
 import com.eomcs.util.ArrayList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class BookController {
@@ -20,28 +19,21 @@ public class BookController {
   public BookController() throws Exception {
     System.out.println("BookController() 호출됨!");
 
-    DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream("books.data")));
+    try {
+      BufferedReader in = new BufferedReader(new FileReader("books.json"));
+      ObjectMapper mapper = new ObjectMapper();
+      String jsonStr = in.readLine();
 
-    while (true) {
-      try {
-        Book book = new Book();
-        book.setTitle(in.readUTF());
-        book.setAuthor(in.readUTF());
-        book.setPress(in.readUTF());
-        book.setPage(in.readInt());
-        book.setPrice(in.readInt());
-        String date = in.readUTF();
-        if (date.length() > 0) {
-          book.setReadDate(Date.valueOf(date));
-        }
-        book.setFeed(in.readUTF());
+      Book[] books = mapper.readValue(jsonStr, Book[].class);
 
-        bookList.add(book);
-      } catch (Exception e) {
-        break;
+      for (Book book : books) {
+        bookList.add(book); 
       }
+
+      in.close();
+    } catch (Exception e) {
+      System.out.println("데이터 로딩중에 오류발생");
     }
-    in.close();
   }
 
   @RequestMapping("/book/list")
@@ -82,25 +74,15 @@ public class BookController {
 
   @RequestMapping("/book/save")
   public Object save() throws Exception {
-    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("books.data")));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("books.json")));
 
-    Object[] arr = bookList.toArray();
-    for (Object obj : arr) {
-      Book book = (Book) obj;
-      out.writeUTF(book.getTitle());
-      out.writeUTF(book.getAuthor());
-      out.writeUTF(book.getPress());
-      out.writeInt(book.getPage());
-      out.writeInt(book.getPrice());
-      if (book.getReadDate() == null) {
-        out.writeUTF("");
-      } else {
-        out.writeUTF(book.getReadDate().toString());
-      }
-      out.writeUTF(book.getFeed());
-    }
+    ObjectMapper mapper = new ObjectMapper();
+
+    String jsonStr = mapper.writeValueAsString(bookList.toArray());
+
+    out.println(jsonStr);
 
     out.close();
-    return arr.length;
+    return bookList.size();
   }
 }

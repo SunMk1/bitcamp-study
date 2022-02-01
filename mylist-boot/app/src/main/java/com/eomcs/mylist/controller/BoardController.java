@@ -1,9 +1,8 @@
 package com.eomcs.mylist.controller;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.Date;
@@ -21,22 +20,21 @@ public class BoardController {
   public BoardController() throws Exception {
     System.out.println("BoardController() 호출됨!");
 
-    DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream("boards.data")));
+    try {
+      BufferedReader in = new BufferedReader(new FileReader("boards.json"));
+      ObjectMapper mapper = new ObjectMapper();
+      String jsonStr = in.readLine();
 
-    while (true) {
-      try {
-        Board board = new Board();
-        board.setTitle(in.readUTF());
-        board.setContent(in.readUTF());
-        board.setViewCount(in.readInt());
-        board.setCreatedDate(Date.valueOf(in.readUTF()));
+      Board[] boards = mapper.readValue(jsonStr, Board[].class);
 
-        boardList.add(board);
-      } catch (Exception e) {
-        break;
+      for (Board board : boards) {
+        boardList.add(board); 
       }
+
+      in.close();
+    } catch (Exception e) {
+      System.out.println("데이터 로딩중에 오류발생");
     }
-    in.close();
   }
 
   @RequestMapping("/board/list")

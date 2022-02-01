@@ -1,15 +1,15 @@
 package com.eomcs.mylist.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.eomcs.mylist.domain.Contact;
 import com.eomcs.util.ArrayList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class ContactController {
@@ -19,22 +19,21 @@ public class ContactController {
   public ContactController() throws Exception {
     System.out.println("ContactController() 호출됨!");
 
-    DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream("contacts.data")));
+    try {
+      BufferedReader in = new BufferedReader(new FileReader("contacts.json"));
+      ObjectMapper mapper = new ObjectMapper();
+      String jsonStr = in.readLine();
 
-    while (true) {
-      try {
-        Contact contact = new Contact();
-        contact.setName(in.readUTF());
-        contact.setEmail(in.readUTF());
-        contact.setTel(in.readUTF());
-        contact.setCompany(in.readUTF());
+      Contact[] contacts = mapper.readValue(jsonStr, Contact[].class);
 
-        contactList.add(contact);
-      } catch (Exception e) {
-        break;
+      for (Contact contact : contacts) {
+        contactList.add(contact); 
       }
+
+      in.close();
+    } catch (Exception e) {
+      System.out.println("데이터 로딩중에 오류발생");
     }
-    in.close();
   }
 
   @RequestMapping("/contact/list")
@@ -93,18 +92,15 @@ public class ContactController {
 
   @RequestMapping("/contact/save")
   public Object save() throws Exception {
-    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("contacts.data")));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("contacts.json")));
 
-    Object[] arr = contactList.toArray();
-    for (Object obj : arr) {
-      Contact contact = (Contact) obj;
-      out.writeUTF(contact.getName());
-      out.writeUTF(contact.getEmail());
-      out.writeUTF(contact.getTel());
-      out.writeUTF(contact.getCompany());
-    }
+    ObjectMapper mapper = new ObjectMapper();
+
+    String jsonStr = mapper.writeValueAsString(contactList.toArray());
+
+    out.println(jsonStr);
 
     out.close();
-    return arr.length;
+    return contactList.size();
   }
 }

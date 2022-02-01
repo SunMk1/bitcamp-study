@@ -1,15 +1,15 @@
 package com.eomcs.mylist.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.eomcs.mylist.domain.Todo;
 import com.eomcs.util.ArrayList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class TodoController {
@@ -19,20 +19,21 @@ public class TodoController {
   public TodoController() throws Exception {
     System.out.println("TodoController() 호출됨!");
 
-    DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream("todos.data")));
+    try {
+      BufferedReader in = new BufferedReader(new FileReader("todos.json"));
+      ObjectMapper mapper = new ObjectMapper();
+      String jsonStr = in.readLine();
 
-    while (true) {
-      try {
-        Todo todo = new Todo();
-        todo.setTitle(in.readUTF());
-        todo.setDone(in.readBoolean());
+      Todo[] todos = mapper.readValue(jsonStr, Todo[].class);
 
-        todoList.add(todo);
-      } catch (Exception e) {
-        break;
+      for (Todo todo : todos) {
+        todoList.add(todo); 
       }
+
+      in.close();
+    } catch (Exception e) {
+      System.out.println("데이터 로딩중에 오류발생");
     }
-    in.close();
   }
 
   @RequestMapping("/todo/list")
@@ -76,16 +77,15 @@ public class TodoController {
 
   @RequestMapping("/todo/save")
   public Object save() throws Exception {
-    DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("todos.data")));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("todos.json")));
 
-    Object[] arr = todoList.toArray();
-    for (Object obj : arr) {
-      Todo todo = (Todo) obj;
-      out.writeUTF(todo.getTitle());
-      out.writeBoolean(todo.isDone());
-    }
+    ObjectMapper mapper = new ObjectMapper();
+
+    String jsonStr = mapper.writeValueAsString(todoList.toArray());
+
+    out.println(jsonStr);
 
     out.close();
-    return arr.length;
+    return todoList.size();
   }
 }
