@@ -22,14 +22,7 @@ public class BoardController {
 
     try {
       BufferedReader in = new BufferedReader(new FileReader("boards.json"));
-      ObjectMapper mapper = new ObjectMapper();
-      String jsonStr = in.readLine();
-
-      Board[] boards = mapper.readValue(jsonStr, Board[].class);
-
-      for (Board board : boards) {
-        boardList.add(board); 
-      }
+      boardList = new ArrayList(new ObjectMapper().readValue(in.readLine(), Board[].class));
 
       in.close();
     } catch (Exception e) {

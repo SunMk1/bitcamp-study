@@ -21,14 +21,7 @@ public class BookController {
 
     try {
       BufferedReader in = new BufferedReader(new FileReader("books.json"));
-      ObjectMapper mapper = new ObjectMapper();
-      String jsonStr = in.readLine();
-
-      Book[] books = mapper.readValue(jsonStr, Book[].class);
-
-      for (Book book : books) {
-        bookList.add(book); 
-      }
+      bookList = new ArrayList(new ObjectMapper().readValue(in.readLine(), Book[].class));
 
       in.close();
     } catch (Exception e) {
