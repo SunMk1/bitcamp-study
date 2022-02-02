@@ -9,9 +9,9 @@ import com.eomcs.mylist.domain.Board;
 import com.eomcs.util.ArrayList;
 
 public class CsvBoardDao {
-  ArrayList boardList = new ArrayList();
-
   String filename = "boards.csv";
+
+  ArrayList boardList = new ArrayList();
 
   public CsvBoardDao() {
     try {
@@ -27,7 +27,7 @@ public class CsvBoardDao {
     }
   }
 
-  public void save() throws Exception{
+  private void save() throws Exception{
     PrintWriter out = new PrintWriter (new BufferedWriter(new FileWriter(filename)));
 
     Object[] arr = boardList.toArray();
