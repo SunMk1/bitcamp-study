@@ -1,15 +1,17 @@
 package com.eomcs.mylist.controller;
 
 import java.sql.Date;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.eomcs.mylist.dao.SerialBoardDao;
+import com.eomcs.mylist.dao.BoardDao;
 import com.eomcs.mylist.domain.Board;
 
 @RestController
 public class BoardController {
 
-  SerialBoardDao boardDao = new SerialBoardDao();
+  @Autowired
+  BoardDao boardDao;
 
   @RequestMapping("/board/list")
   public Object list() { 
@@ -19,7 +21,7 @@ public class BoardController {
   @RequestMapping("/board/add")
   public Object add(Board board) throws Exception {
     board.setCreatedDate(new Date(System.currentTimeMillis()));
-    boardDao.create(board);
+    boardDao.insert(board);
 
     return boardDao.countAll();
   }
@@ -42,11 +44,11 @@ public class BoardController {
     }
     board.setViewCount(old.getViewCount());
     board.setCreatedDate(old.getCreatedDate());
-    return boardDao.modify(index, board);
+    return boardDao.update(index, board);
   }
 
   @RequestMapping("/board/delete")
   public Object delete(int index) throws Exception {
-    return boardDao.remove(index);
+    return boardDao.delet(index);
   }
 }

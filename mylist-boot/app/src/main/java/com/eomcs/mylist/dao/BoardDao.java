@@ -3,17 +3,17 @@ package com.eomcs.mylist.dao;
 import com.eomcs.mylist.domain.Board;
 
 public interface BoardDao {
-  public int countAll();
+  int countAll();
 
-  public Object[] findAll();
+  Object[] findAll();
 
-  public void insert(Board board) throws Exception; 
+  void insert(Board board) throws Exception; 
 
-  public Board findByNo(int no);
+  Board findByNo(int no);
 
-  public int update(int no, Board board) throws Exception;
+  int update(int no, Board board) throws Exception;
 
-  public int delet(int no) throws Exception;
+  int delet(int no) throws Exception;
 
-  public void increaseViewCount(int no) throws Exception;
+  void increaseViewCount(int no) throws Exception;
 }

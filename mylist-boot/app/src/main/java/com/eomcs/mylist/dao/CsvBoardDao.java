@@ -5,13 +5,12 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import org.springframework.stereotype.Repository;
 import com.eomcs.mylist.domain.Board;
-import com.eomcs.util.ArrayList;
 
-public class CsvBoardDao {
+@Repository
+public class CsvBoardDao extends AbstractBoardDao {
   String filename = "boards.csv";
-
-  ArrayList boardList = new ArrayList();
 
   public CsvBoardDao() {
     try {
@@ -27,10 +26,10 @@ public class CsvBoardDao {
     }
   }
 
-  private void save() throws Exception{
+  @Override
+  public void save() throws Exception{
     PrintWriter out = new PrintWriter (new BufferedWriter(new FileWriter(filename)));
 
-    Object[] arr = boardList.toArray();
     for (int i = 0; i < boardList.size(); i++) {
       Board board = (Board) boardList.get(i);
       out.println(board.toCsvString());
@@ -38,49 +37,5 @@ public class CsvBoardDao {
     out.flush();
 
     out.close();
-  }
-
-  public int countAll() {
-    return boardList.size();
-  }
-
-  public Object[] findAll() {
-    return boardList.toArray();
-  }
-
-  public void insert(Board board) throws Exception {
-    boardList.add(board);
-    save();
-  }
-
-  public Board findByNo(int no) {
-    if (no < 0 || no >= boardList.size()) {
-      return null;
-    }
-    return (Board) boardList.get(no);
-  }
-
-  public int update(int no, Board board) throws Exception {
-    if (no < 0 || no >= boardList.size()) { 
-      return 0;
-    }
-    boardList.set(no, board);
-    save();
-    return 1;
-  }
-
-  public int delet(int no) throws Exception {
-    if (no < 0 || no >= boardList.size()) {
-      return 0;
-    }
-    boardList.remove(no);
-    save();
-    return 1;
-  }
-
-  public void increaseViewCount(int no) throws Exception {
-    Board board = findByNo(no);
-    board.setViewCount(board.getViewCount() + 1);
-    save();
   }
 }
