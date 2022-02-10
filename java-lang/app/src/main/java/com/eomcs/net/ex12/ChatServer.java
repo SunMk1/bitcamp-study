@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+@SuppressWarnings("rawtypes")
 public class ChatServer {
 
   int port;
@@ -27,9 +28,21 @@ public class ChatServer {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void sendMessage(String message) {
+    ArrayList deleteStreams = new ArrayList();
+
     for (int i = 0; i < clientOutputStream.size(); i++) {
-      DataOutputStream
+      DataOutputStream out = (DataOutputStream) clientOutputStream.get(i);
+      try {
+        out.writeUTF(message);
+      } catch (Exception e) {
+        System.out.println("전송오류" + message);
+        deleteStreams.add(out);
+      }
+    }
+    for (Object deleteStream : deleteStreams) {
+      clientOutputStream.remove(deleteStream);
     }
   }
 
@@ -50,20 +63,21 @@ public class ChatServer {
 
         clientOutputStream.add(out);
 
-        out.writeUTF("환영합니다");
+        String nickname = in.readUTF();
+
+        out.writeUTF(nickname + "환영합니다");
         out.flush();
 
         while (true) {
           String message = in.readUTF();
           if (message.equals("\\quit")) {
-            out.writeUTF("Goodbye");
+            out.writeUTF("<[QUIT[]]>");
             out.flush();
+            clientOutputStream.remove(out);
             break;
           }
-          out.writeUTF(message);
-          out.flush();
+          sendMessage(String.format("[%s] %s", nickname, message));
         }
-
       } catch (Exception e) {
         System.out.println("클라이언트와의 통신 오류!" + e.getMessage());
       }

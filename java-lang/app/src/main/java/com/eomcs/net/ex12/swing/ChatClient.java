@@ -24,18 +24,41 @@ public class ChatClient extends JFrame {
   Socket socket;
   DataInputStream in;
   DataOutputStream out;
+  String nickname;
 
   JTextField addressTf = new JTextField(30);
   JTextField portTf = new JTextField(4);
   JTextArea messageListTa = new JTextArea();
   JTextField messageTf = new JTextField(35);
+  JButton connectBtn = new JButton("연결");
 
   public ChatClient() {
     super("채팅!");
+
+    String title = "대화명을 입력하세요\n(2자 이상)";
+
+    while (true) {
+      nickname = JOptionPane.showInputDialog(title);
+      if (nickname == null) {
+        System.exit(0);
+      } else if (nickname.length() >= 2) {
+        break;
+      }
+      title = "대화명을 다시 입력하세요\n(2자 이상)";
+    }
+
+    setTitle("채팅-" + nickname);
+
     this.addWindowListener(new WindowAdapter() {
 
       @Override
       public void windowClosing(WindowEvent e) {
+        if (connectBtn.getText().equals("종료")){
+          try {
+            out.writeUTF("\\quit");
+            out.flush();
+          } catch (Exception ex) {}
+        };
         try {in.close();} catch (Exception ex) {}
         try {out.close();} catch (Exception ex) {}
         try {socket.close();} catch (Exception ex) {}
@@ -49,7 +72,6 @@ public class ChatClient extends JFrame {
     topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
     topPanel.add(addressTf);
     topPanel.add(portTf);
-    JButton connectBtn = new JButton("연결");
     connectBtn.addActionListener(this::connectChatServer);
     topPanel.add(connectBtn);
     contentPane.add(topPanel, BorderLayout.NORTH);
@@ -68,33 +90,43 @@ public class ChatClient extends JFrame {
     messageTf.addActionListener(this::sendMessage);
 
     setVisible(true);
+
+
   }
 
   public static void main(String[] args) throws Exception {
     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-    //    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-    //    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-    //    UIManager.setLookAndFeel("javax.swing.plaf.metal.NimbusLookAndFeel");
     new ChatClient();
   }
 
   public void connectChatServer(ActionEvent e) {
-    System.out.println("서버에 연결하기!");
+    if (connectBtn.getText().equals("연결")) {
 
-    try {
-      socket = new Socket(
-          addressTf.getText(),
-          Integer.parseInt(portTf.getText()));
+      try {
+        socket = new Socket(
+            addressTf.getText(),
+            Integer.parseInt(portTf.getText()));
 
-      in = new DataInputStream(socket.getInputStream());
-      out = new DataOutputStream(socket.getOutputStream());
+        in = new DataInputStream(socket.getInputStream());
+        out = new DataOutputStream(socket.getOutputStream());
 
-      String welcomeMessage = in.readUTF();
-      messageListTa.append(welcomeMessage + "\n");
+        out.writeUTF(nickname);
+        out.flush();
 
+        new MessageReceiver(in).start();
 
-    } catch (Exception ex) {
-      JOptionPane.showMessageDialog(this, "서버에 연결 중 오류 발생", "실행 오류!", JOptionPane.ERROR_MESSAGE);
+      } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "서버에 연결 중 오류 발생", "실행 오류!", JOptionPane.ERROR_MESSAGE);
+      }
+
+      connectBtn.setText("종료");
+    } else {
+      try {
+        out.writeUTF("\\quit");
+        out.flush();
+      } catch (Exception ex) {}
+      connectBtn.setText("연결");
+      messageListTa.setText("");
     }
   }
 
@@ -107,10 +139,29 @@ public class ChatClient extends JFrame {
       out.flush();
       messageTf.setText("");
 
-      String response = in.readUTF();
-      messageListTa.append(response + "\n");
     } catch (Exception ex){
       JOptionPane.showMessageDialog(this, "메세지 전송 오류!", "통신 오류!", JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  class MessageReceiver extends Thread {
+    DataInputStream in;
+
+    public MessageReceiver(DataInputStream in) {
+      this.in = in;
+    }
+
+    @Override
+    public void run() {
+      while (true) {
+        try {
+          String message = in.readUTF();
+          if (message.equals("<![QUIT[]]>")) {
+            break;
+          }
+          messageListTa.append(message + "\n");
+        } catch (Exception e) {}
+      }
     }
   }
 }
