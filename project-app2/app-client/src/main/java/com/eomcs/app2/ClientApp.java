@@ -1,9 +1,7 @@
 package com.eomcs.app2;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import com.eomcs.app2.handler.ScoreHandler;
+import com.eomcs.app2.net.ScoreTableProxy;
 import com.eomcs.util.Prompt;
 
 public class ClientApp {
@@ -13,21 +11,19 @@ public class ClientApp {
   }
 
   public void service() {
-    try (Socket socket = new Socket("localhost", 3336);
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());)
-    {
+    try {
+
       System.out.println("서버와 연결되었음");
 
-      ScoreHandler scoreHandler = new ScoreHandler(in, out);
+      ScoreTableProxy socreTableProxy = new ScoreTableProxy("localhost", 3336);
+      ScoreHandler scoreHandler = new ScoreHandler(socreTableProxy);
 
       while (true) {
         printMenu();
         String input = Prompt.promptString("명령> ");
 
         if (checkQuit(input)) {
-          out.writeUTF("quit");
-          out.flush();
+          socreTableProxy.close();
           break;
         }
 
