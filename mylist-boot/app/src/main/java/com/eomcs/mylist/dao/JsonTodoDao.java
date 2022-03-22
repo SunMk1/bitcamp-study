@@ -1,6 +1,7 @@
 package com.eomcs.mylist.dao;
 
 import java.io.File;
+import java.util.List;
 import com.eomcs.mylist.domain.Todo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,7 +12,7 @@ public class JsonTodoDao extends AbstractTodoDao {
   public JsonTodoDao() {
     try {
       ObjectMapper mapper = new ObjectMapper();
-      todoList.addAll(mapper.readValue(new File(filename), Todo[].class));
+      todoList.addAll(mapper.readValue(new File(filename), mapper.getTypeFactory().constructCollectionType(List.class, Todo.class)));
     } catch (Exception e) {
       System.out.println("데이터 로딩중 오류 발생");
     }
