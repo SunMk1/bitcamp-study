@@ -2,68 +2,61 @@ package com.eomcs.mylist.domain;
 
 import java.sql.Date;
 
-public class Board implements java.io.Serializable {
+public class Board {
 
+  int no;
   String title;
   String content;
-  int viewCount;
   Date createdDate;
+  int viewCount;
 
   public Board() {
     System.out.println("Board() 호출됨!");
   }
 
-  public Board(String csvStr) {
-    String[] values = csvStr.split(",");
-    this.setTitle(values[0]);
-    this.setContent(values[1]);
-    this.setViewCount(Integer.valueOf(values[2]));
-    this.setCreatedDate(Date.valueOf(values[3]));
+  @Override
+  public String toString() {
+    return "Board [no=" + no + ", title=" + title + ", content=" + content + ", createdDate="
+        + createdDate + ", viewCount=" + viewCount + "]";
   }
 
-  public static Board valueOf(String csvStr) {
-    String[] values = csvStr.split(",");
-    Board board = new Board();
-    board.setTitle(values[0]);
-    board.setContent(values[1]);
-    board.setViewCount(Integer.valueOf(values[2]));
-    board.setCreatedDate(Date.valueOf(values[3]));
-
-    return board;
+  public int getNo() {
+    return no;
   }
 
-  public String toCsvString() {
-    return String.format("%s,%s,%s,%s",
-        this.getTitle(),
-        this.getContent(),
-        this.getViewCount(),
-        this.getCreatedDate());
+  public void setNo(int no) {
+    this.no = no;
   }
 
   public String getTitle() {
     return title;
   }
+
   public void setTitle(String title) {
     this.title = title;
   }
+
   public String getContent() {
     return content;
   }
+
   public void setContent(String content) {
     this.content = content;
   }
-  public int getViewCount() {
-    return viewCount;
-  }
-  public void setViewCount(int viewCount) {
-    this.viewCount = viewCount;
-  }
-  public java.sql.Date getCreatedDate() {
+
+  public Date getCreatedDate() {
     return createdDate;
   }
-  public void setCreatedDate(java.sql.Date createdDate) {
+
+  public void setCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
   }
 
+  public int getViewCount() {
+    return viewCount;
+  }
 
+  public void setViewCount(int viewCount) {
+    this.viewCount = viewCount;
+  }
 }

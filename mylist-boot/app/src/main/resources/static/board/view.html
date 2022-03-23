@@ -7,6 +7,7 @@
 <body>
     <h1>게시글 상세</h1>
     <form>
+        번호: <span id="x-no"></span><br> 
         제목*: <input id="x-title" type="text"><br> 
         내용*: <textarea id="x-content" cols="60" rows="10"></textarea><br>
         조회수: <span id="x-viewCount"></span><br>
@@ -25,24 +26,26 @@
         // console.log(qs)
 
         var params = new URLSearchParams(location.search)
-        var index = params.get("index")
+        var no = params.get("no")
 
-        if (index == null) {
+        if (no == null) {
             alert("값이 없습니다.")
             throw "파라미터 오류"
         }
-        console.log(index)
+        console.log(no)
 
+        var xNo = document.querySelector("#x-no")
         var xTitle = document.querySelector("#x-title")
         var xContent = document.querySelector("#x-content")
         var xViewCount = document.querySelector("#x-viewCount")
         var xCreatedDate = document.querySelector("#x-createdDate")
 
-        fetch(`/board/get?index=${index}`)
+        fetch(`/board/get?no=${no}`)
         .then(function(response){
             return response.json()
         })
         .then(function(boards){
+            xNo.innerHTML = boards.no
             xTitle.value = boards.title
             xContent.value = boards.content
             xViewCount.innerHTML = boards.viewCount
@@ -54,7 +57,7 @@
                     window.alert("필수 입력 항목이 비어 있습니다.")
                     return
                 }
-            fetch(`/board/update?index=${index}&title=${xTitle.value}&content=${xContent.value}`)
+            fetch(`/board/update?no=${no}&title=${xTitle.value}&content=${xContent.value}`)
             .then(function(response) {
                 return response.text()
             })
@@ -65,7 +68,7 @@
         } 
         
         document.querySelector("#x-delete-btn").onclick = function() {
-            fetch(`/board/delete?index=${index}`)
+            fetch(`/board/delete?no=${no}`)
             .then(function(response){
                 return response.json()
             })
