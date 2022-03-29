@@ -25,7 +25,7 @@ public class BoardController {
   @RequestMapping("/board/get")
   public Object get(int no) {
     Board board = boardDao.findByNo(no);
-    if (board == null) { 
+    if (board == null) {
       return "";
     }
     boardDao.updateViewCount(no);
@@ -39,6 +39,6 @@ public class BoardController {
 
   @RequestMapping("/board/delete")
   public Object delete(int no) {
-    return boardDao.delet(no);
+    return boardDao.delete(no);
   }
 }

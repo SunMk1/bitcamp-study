@@ -25,8 +25,9 @@ public class ContactController {
   }
 
   @RequestMapping("/contact/get")
-  public Object get(String email) {
-    return contactDao.findByEmail(email) == null ? "" : contactDao.findByEmail(email);
+  public Object get(int no) {
+    Contact contact = contactDao.findByNo(no);
+    return contact == null ? "" : contact;
   }
 
   @RequestMapping("/contact/update")
@@ -35,7 +36,7 @@ public class ContactController {
   }
 
   @RequestMapping("/contact/delete")
-  public Object delete(String email) throws Exception {
-    return contactDao.delet(email);
+  public Object delete(int no) throws Exception {
+    return contactDao.delet(no);
   }
 }

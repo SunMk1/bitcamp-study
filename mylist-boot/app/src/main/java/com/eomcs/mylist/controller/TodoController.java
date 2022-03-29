@@ -25,21 +25,17 @@ public class TodoController {
   }
 
   @RequestMapping("/todo/update")
-  public Object update(int index, Todo todo) throws Exception {
-    return todoDao.findByNo(index) == null ? 0 : todoDao.update(index, todo);
+  public Object update(Todo todo) throws Exception {
+    return todoDao.update(todo);
   }
 
   @RequestMapping("/todo/check")
-  public Object check(int index, boolean done) {
-    if (index < 0 || index >= todoDao.countAll()) {
-      return 0; //인덱스가 무효해서 설정하지 못했다.
-    }
-    todoDao.findByNo(index).setDone(done);
-    return 1; // 해당 항목의 상태를 변경했다.
+  public Object check(int no, boolean done) {
+    return todoDao.updateDone(no, done);
   }
 
   @RequestMapping("/todo/delete")
-  public Object delete(int index) throws Exception {
-    return todoDao.delet(index);
+  public Object delete(int no) throws Exception {
+    return todoDao.delet(no);
   }
 }

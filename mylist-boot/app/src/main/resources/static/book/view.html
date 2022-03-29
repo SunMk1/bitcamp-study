@@ -29,13 +29,12 @@
         // console.log(qs)
 
         var params = new URLSearchParams(location.search)
-        var index = params.get("index")
+        var no = params.get("no")
 
-        if (index == null) {
+        if (no == null) {
             alert("값이 없습니다.")
             throw "파라미터 오류"
         }
-        console.log(index)
 
         var xTitle = document.querySelector("#x-title")
         var xAuthor = document.querySelector("#x-author")
@@ -45,7 +44,7 @@
         var xReadDate = document.querySelector("#x-readDate")
         var xFeed = document.querySelector("#x-feed")
 
-        fetch(`/book/get?index=${index}`) 
+        fetch(`/book/get?no=${no}`) 
         .then(function(response){
             return response.json()
         })
@@ -68,7 +67,7 @@
                 return
                 }
                 
-                var qs = `index=${index}&title=${xTitle.value}&author=${xAuthor.value}&press=${xPress.value}`
+                var qs = `no=${no}&title=${xTitle.value}&author=${xAuthor.value}&press=${xPress.value}`
                 qs += `&page=${xPage.value}&price=${xPrice.value}&feed=${xFeed.value}`
                 
                 if (xReadDate.value != "") {
@@ -81,23 +80,23 @@
             })
             .then(function(text){
                 console.log(text)
-                location.href = "index.html"
+                location.href = "no.html"
             })
         } 
         
         document.querySelector("#x-delete-btn").onclick = function() {
-            fetch(`/book/delete?index=${index}`)
+            fetch(`/book/delete?no=${no}`)
             .then(function(response){
                 return response.json()
             })
             .then(function(result) {
                 console.log(result)
-                location.href = "index.html"
+                location.href = "no.html"
             })
         }
 
         document.querySelector("#x-cancel-btn").onclick = function() {
-            location.href = "index.html"
+            location.href = "no.html"
         }
     </script>
 </body>

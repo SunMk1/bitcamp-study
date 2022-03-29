@@ -7,11 +7,11 @@
 <body>
     <h1>연락처 상세</h1>
     <form>
-       이메일*: <input id="x-email" type="text" readonly><br> 
-       이름*: <input id="x-name" type="text"><br> 
-       전화*: <input id="x-tel" type="text"><br> 
-       회사: <input id="x-company" type="text"><br> 
-       별표(*) 항목은 필수 입력입니다.<br>
+        이름*: <input id="x-name" type="text"><br> 
+        전화*: <input id="x-tel" type="text"><br> 
+        이메일*: <input id="x-email" type="text"><br> 
+        회사: <input id="x-company" type="text"><br> 
+        별표(*) 항목은 필수 입력입니다.<br>
        <button id="x-update-btn" type="button">변경</button>
        <button id="x-delete-btn" type="button">삭제</button>
        <button id="x-cancel-btn" type="button">취소</button>
@@ -26,20 +26,19 @@
         // console.log(qs)
 
         var params = new URLSearchParams(location.search)
-        var email = params.get("email")
+        var no = params.get("no")
 
-        if (email == null) {
+        if (no == null) {
             alert("이메일 값이 없습니다.")
             throw "파라미터 오류"
         }
-        console.log(email)
 
         var xName = document.querySelector("#x-name")
         var xEmail = document.querySelector("#x-email")
         var xTel = document.querySelector("#x-tel")
         var xCompany = document.querySelector("#x-company")
 
-        fetch(`/contact/get?email=${email}`)
+        fetch(`/contact/get?no=${no}`)
         .then(function(response){
             return response.json()
         })
@@ -55,7 +54,7 @@
                     window.alert("필수 입력 항목이 비어 있습니다.")
                     return
                 }
-            fetch(`/contact/update?name=${xName.value}&email=${xEmail.value}&tel=${xTel.value}&company=${xCompany.value}`)
+            fetch(`/contact/update?no=${no}name=${xName.value}&email=${xEmail.value}&tel=${xTel.value}&company=${xCompany.value}`)
             .then(function(response) {
                 return response.text()
             })
@@ -66,7 +65,7 @@
         } 
         
         document.querySelector("#x-delete-btn").onclick = function() {
-            fetch(`/contact/delete?email=${email}`)
+            fetch(`/contact/delete?no=${no}`)
             .then(function(response){
                 return response.json()
             })

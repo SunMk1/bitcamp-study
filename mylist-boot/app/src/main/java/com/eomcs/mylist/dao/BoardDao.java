@@ -1,9 +1,12 @@
 package com.eomcs.mylist.dao;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 import com.eomcs.mylist.domain.Board;
 
+@Mapper
 public interface BoardDao {
+
   int countAll();
 
   List<Board> findAll();
@@ -14,7 +17,7 @@ public interface BoardDao {
 
   int update(Board board);
 
-  int delet(int no);
+  int delete(int no);
 
   int updateViewCount(int no);
 }
