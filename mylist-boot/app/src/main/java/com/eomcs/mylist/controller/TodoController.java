@@ -36,6 +36,6 @@ public class TodoController {
 
   @RequestMapping("/todo/delete")
   public Object delete(int no) throws Exception {
-    return todoDao.delet(no);
+    return todoDao.delete(no);
   }
 }

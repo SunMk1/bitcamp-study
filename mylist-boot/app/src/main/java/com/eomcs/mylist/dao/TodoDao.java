@@ -20,5 +20,5 @@ public interface TodoDao {
 
   int updateDone(@Param("no") int no, @Param("done") boolean done );
 
-  int delet(int no);
+  int delete(int no);
 }

@@ -21,6 +21,6 @@ public interface ContactDao {
 
   int update(Contact contact);
 
-  int delet(int no);
+  int delete(int no);
 
 }

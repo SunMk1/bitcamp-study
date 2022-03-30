@@ -37,6 +37,6 @@ public class ContactController {
 
   @RequestMapping("/contact/delete")
   public Object delete(int no) throws Exception {
-    return contactDao.delet(no);
+    return contactDao.delete(no);
   }
 }

@@ -29,18 +29,19 @@
 
     <input type="text" id="x-title-input">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        var titleInput = document.querySelector("#x-title-input")
-        titleInput.style["display"] = "none"
+        var titleInput = $("#x-title-input")
+        titleInput.css("display", "none")
 
-        var tbody = document.querySelector("#x-todo-table tbody")
+        var tbody = $("#x-todo-table tbody")
         
-        document.querySelector("#x-todo-input").onkeyup = function(e) {
+        $("#x-todo-input").keyup(function(e) {
             if (e.keyCode == 27) {
-                e.target.value = ""
+                $(e.target).val("")
             } else if (e.keyCode == 13) {
-                if (e.target.value == "") {
-                    window.alert("필수 입력 항목이 비어 있습니다.")
+                if ($(e.target).val() == "") {
+                    alert("필수 입력 항목이 비어 있습니다.")
                     return
                 }
                 fetch(`/todo/add?title=${e.target.value}`)
@@ -52,31 +53,29 @@
                     location.reload()
                 })
             }
-        }
+        })
 
         fetch("/todo/list")
         .then(function(response) {
             return response.json()
         })
         .then(function(todoList) {
-            console.log(todoList)
-            for (var i = 0; i < todoList.length; i++) {
-                var tr = document.createElement("tr")
-                tr.setAttribute("data-no", i)
-                var checkedOption = ""
-                var titleTdOption = ""
-                if (todoList[i].done) {
-                    checkedOption = "checked"
-                    titleTdOption = "class='todo-checked'"
-                }
-                tr.innerHTML = `<td><input type="checkbox" ${checkedOption} onchange="checkTodo(${i},event.target.checked)"></td>
-                <td class="todo-title"><span ${titleTdOption}>${todoList[i].title}</span></td>                
-                <td><button type="button" class="update-btn" data-no="${i}">변경</button></td>
-                <td><button type="button" class="delet-btn" data-no="${i}">삭제</button></td>`
-
-                tbody.appendChild(tr)
+          console.log(todoList)
+          for (var todo of todoList) {
+            var checkedOption = ""
+            var titleTdOption = ""
+            if (todo.done) {
+              checkedOption = "checked"
+              titleTdOption = "class='todo-checked'"
             }
-            document.querySelector("#x-todo-input").focus()
+            $("<tr>").attr("data-no", todo.no)
+              .html(`<td><input type="checkbox" ${checkedOption} onchange="checkTodo(${todo.no},event.target.checked)"></td>
+                     <td class="todo-title"><span ${titleTdOption}>${todo.title}</span></td>                
+                     <td><button type="button" class="update-btn" data-no="${todo.no}">변경</button></td>
+                     <td><button type="button" class="delete-btn" data-no="${todo.no}">삭제</button></td>`)
+              .appendTo(tbody)
+          }
+          $("#x-todo-input").focus()
         })
 
         tbody.onclick = function(e) {
@@ -84,15 +83,15 @@
             // => 삭제 버튼은 동적으로 생성된다.
             // => 따라서 부모 태그에 리스너를 등록해야 한다.
             // if (e.target instanceof HTMLButtonElement) {  or
-             if (e.target.classList == "delet-btn") {
+             if (e.target.classList == "delete-btn") {
                 var no = e.target.getAttribute("data-no")
-                fetch(`/todo/delete?index=${no}`)
+                fetch(`/todo/delete?no=${no}`)
                 .then(function(response){
                     return response.json()
                 })
                 .then(function(result) {
                    if (result == 0) {
-                       window.alert("삭제할 수 없습니다.")
+                       alert("삭제할 수 없습니다.")
                    } else {
                     location.reload()
                    }
@@ -101,63 +100,63 @@
             if (e.target.classList == "update-btn") {
                 var no = e.target.getAttribute("data-no")
                 // 현재 todo 항목을 편집 중인 상태에서 변경 버튼을 눌렀다면
-                if (titleInput.parentNode instanceof HTMLTableCellElement){
+                if (titleInput.parent() instanceof HTMLTableCellElement){
                     // 다른 항목을 편집하기 위해 이동하기 전 해당항목을 편집 전의 상태로 되돌린다.
-                    titleInput.parentNode.querySelector("span").style["display"] = ""
+                    titleInput.parent().find("span").css("display", "")
                 }
-                var titleTd = document.querySelector(`tr[data-no="${no}"] > td.todo-title`)
-                var titleSpan = titleTd.querySelector("span")
-                titleSpan.style["display"] = "none"
-                titleInput.value = titleSpan.innerHTML
-                titleInput.setAttribute("data-no", no)
-                titleTd.appendChild(titleInput)
-                titleInput.style["display"] = ""
+                var titleTd = $(`tr[data-no="${no}"] > td.todo-title`)
+                var titleSpan = titleTd.find("span")
+                titleSpan.css("display", "none")
+                titleInput.val(titleSpan.html())
+                titleInput.attr("data-no", no)
+                titleTd.append(titleInput)
+                titleInput.css("display", "")
             }
         }
 
         function cancelTodoEditing() {
-                titleInput.parentNode.querySelector("span").style["display"] = ""
-                titleInput.style["display"] = "none"
-                document.body.appendChild(titleInput)
+                titleInput.parent().find("span").css("display", "")
+                titleInput.css("display", "none")
+                $(document.body).append(titleInput)
             }
-        titleInput.onkeyup = function(e) {
-            var no = titleInput.getAttribute("data-no")
-            var titleSpan = titleInput.parentNode.querySelector("span")
-            var originTitle = titleSpan.innerHTML
+        titleInput.keyup(function(e) {
+            var no = titleInput.attr("data-no")
+            var titleSpan = titleInput.parent().find("span")
+            var originTitle = titleSpan.html()
             if (e.keyCode == 27) {
                 cancelTodoEditing()
             } else if (e.keyCode == 13 && titleInput.value != "" && originTitle != titleInput.value) {
-                fetch(`/todo/update?index=${no}&title=${titleInput.value}`)
+                fetch(`/todo/update?no=${no}&title=${titleInput.value}`)
                 .then(function(response){
                     return response.json()
                 })
                 .then(function(result) {
                    if (result == 0) {
-                       window.alert("변경하지 못했습니다!")
+                       alert("변경하지 못했습니다!")
                    } else {
                     console.log("변경했습니다!")
-                    titleSpan.innerHTML = titleInput.value
+                    titleSpan.html(titleInput.val()) 
                     cancelTodoEditing()
                    }
                 })
             }
-        }
+        })
 
 
         function checkTodo(no, checked) {
-            fetch(`/todo/check?index=${no}&done=${checked}`)
+            fetch(`/todo/check?no=${no}&done=${checked}`)
             .then(function(response){
                 return response.json()
             })
             .then(function(result) {
                 if (result == 0) {
-                    window.alert("변경하지 못했습니다!");d
+                    alert("변경하지 못했습니다!");d
                 } else {
-                     var titleSpan = document.querySelector(`tr[data-no="${no}"] > td.todo-title > span`)
+                     var titleSpan = $(`tr[data-no="${no}"] > td.todo-title > span`)
                     if (checked) {
-                        titleSpan.classList.add("todo-checked")
+                        titleSpan.addClass("todo-checked")
                     } else {
-                    titleSpan.classList.remove("todo-checked")
+                    titleSpan.removeClass("todo-checked")
                     }
                 }
             })

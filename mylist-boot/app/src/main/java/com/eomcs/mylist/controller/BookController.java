@@ -37,6 +37,6 @@ public class BookController {
 
   @RequestMapping("/book/delete")
   public Object delete(int no) throws Exception {
-    return bookDao.delet(no);
+    return bookDao.delete(no);
   }
 }
