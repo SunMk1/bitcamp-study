@@ -1,15 +1,14 @@
-package com.eomcs.mylist.service;
+package com.eomcs.mylist.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import com.eomcs.mylist.dao.ContactDao;
 import com.eomcs.mylist.domain.Contact;
 import com.eomcs.mylist.domain.ContactTel;
 
-@Service
-public class ContactServiceTransaction {
+//@Service
+public class TransactionTemplateContactService {
 
   @Autowired
   ContactDao contactDao;

@@ -1,4 +1,4 @@
-package com.eomcs.mylist.service;
+package com.eomcs.mylist.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +7,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.eomcs.mylist.dao.ContactDao;
 import com.eomcs.mylist.domain.Contact;
 import com.eomcs.mylist.domain.ContactTel;
+import com.eomcs.mylist.service.ContactService;
 
 @Service
-public class ContactServiceTransaction2 {
+public class DefaultContactServiceImpl implements ContactService {
 
   @Autowired
   ContactDao contactDao;
@@ -17,6 +18,7 @@ public class ContactServiceTransaction2 {
   @Autowired
   TransactionTemplate transactionTemplate;
 
+  @Override
   public int add(Contact contact) {
     return transactionTemplate.execute(status -> {
       contactDao.insert(contact);
@@ -28,6 +30,7 @@ public class ContactServiceTransaction2 {
     });
   }
 
+  @Override
   public List<Contact> list() {
     List<Contact> contactList = contactDao.findAll();
     for (Contact contact : contactList) {
@@ -36,6 +39,7 @@ public class ContactServiceTransaction2 {
     return contactList;
   }
 
+  @Override
   public Contact get(int no) {
     Contact contact = contactDao.findByNo(no);
     if (contact != null) {
@@ -44,6 +48,7 @@ public class ContactServiceTransaction2 {
     return contact;
   }
 
+  @Override
   public int update(Contact contact) {
 
     return transactionTemplate.execute(status -> {
@@ -58,6 +63,7 @@ public class ContactServiceTransaction2 {
     });
   }
 
+  @Override
   public int delete(int no) {
     return transactionTemplate.execute(status -> {
       contactDao.deleteTelByContactNo(no);

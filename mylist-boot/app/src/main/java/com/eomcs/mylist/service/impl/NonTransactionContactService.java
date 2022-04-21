@@ -1,4 +1,4 @@
-package com.eomcs.mylist.service;
+package com.eomcs.mylist.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,7 @@ import com.eomcs.mylist.domain.Contact;
 import com.eomcs.mylist.domain.ContactTel;
 
 //@Service
-public class ContactServiceNonTransaction {
+public class NonTransactionContactService {
 
   @Autowired
   ContactDao contactDao;
